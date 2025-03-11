@@ -33,7 +33,7 @@ public class PcDaoImpl implements IPcDao {
 
 	@Override
 	public List<Pc> pcsParMC(String mc) {
-		List<Pc> prods = new ArrayList<Pc>();
+		List<Pc> pcs = new ArrayList<Pc>();
 		Connection conn = SingletonConnection.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("select * from PCS where NOM_PC LIKE ?");
@@ -44,12 +44,12 @@ public class PcDaoImpl implements IPcDao {
 				p.setIdPc(rs.getLong("ID_PC"));
 				p.setNomPc(rs.getString("NOM_PC"));
 				p.setPrix(rs.getDouble("PRIX"));
-				prods.add(p);
+				pcs.add(p);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return prods;
+		return pcs;
 	}
 
 	@Override

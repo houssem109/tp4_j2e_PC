@@ -25,14 +25,15 @@ public class ControleurServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String path = request.getServletPath();
+		double prix ;
 		if (path.equals("/index.do")) {
 			request.getRequestDispatcher("pcs.jsp").forward(request, response);
 		} else if (path.equals("/chercher.do")) {
 			String motCle = request.getParameter("motCle");
 			PcModele model = new PcModele();
 			model.setMotCle(motCle);
-			List<Pc> prods = PcMetier.pcsParMC(motCle);
-			model.setPcs(prods);
+			List<Pc> pcs = PcMetier.pcsParMC(motCle);
+			model.setPcs(pcs);
 			request.setAttribute("model", model);
 			request.getRequestDispatcher("pcs.jsp").forward(request, response);
 
@@ -41,7 +42,15 @@ public class ControleurServlet extends HttpServlet {
 			
 		} else if (path.equals("/save.do") && request.getMethod().equals("POST")) {
 			String nom = request.getParameter("nom");
-			double prix = Double.parseDouble(request.getParameter("prix"));
+			if (request.getParameter("prix").isEmpty())
+			{
+				System.out.println("prix est videeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee ............");
+				prix=0;
+		}else
+		{
+			prix = Double.parseDouble(request.getParameter("prix"));
+
+		}
 			Pc p = PcMetier.save(new Pc(nom, prix));
 			request.setAttribute("pc", p);
 
@@ -63,7 +72,7 @@ public class ControleurServlet extends HttpServlet {
 		} else if (path.equals("/update.do")) {
 			Long id = Long.parseLong(request.getParameter("id"));
 			String nom = request.getParameter("nom");
-			double prix = Double.parseDouble(request.getParameter("prix"));
+			 prix = Double.parseDouble(request.getParameter("prix"));
 			Pc p = new Pc();
 			p.setIdPc(id);
 			p.setNomPc(nom);
